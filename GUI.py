@@ -10,6 +10,8 @@ from CommonLib import *
 from VigenereLib import *
 from PlayfairLib import *
 from AffineLib import *
+from FullVigenereLib import *
+from ExtendedLib import *
 
 class GUI:
     def __init__(self,parent):
@@ -131,11 +133,11 @@ class GUI:
                 if (self.mode=="Vigenere"): # Vigenere
                     ciphertext = VigenereEncrypt(plaintext,key)
                 elif (self.mode=="Full Vigenere"): # Full Vigenere
-                    pass
+                    ciphertext = FullVigenereEncrypt(plaintext,key)
                 elif (self.mode=="Auto-Key Vigenere"): # Auto Key
                     ciphertext = AutoKeyVigenereEncrypt(plaintext,key)
                 elif (self.mode=="Extended Vigenere"): # Extended
-                    pass
+                    ciphertext = ExtendedEncrypt(plaintext,key)
                 elif (self.mode=="Playfair"): # Playfair
                     ciphertext = PlayfairEncrypt(plaintext,key)
                 
@@ -186,11 +188,11 @@ class GUI:
                 if (self.mode=="Vigenere"): # Vigenere
                     plaintext = VigenereDecrypt(ciphertext,key)
                 elif (self.mode=="Full Vigenere"): # Full Vigenere
-                    pass
+                    plaintext = FullVigenereDecrypt(ciphertext,key)
                 elif (self.mode=="Auto-Key Vigenere"): # Auto Key
                     plaintext = AutoKeyVigenereDecrypt(ciphertext,key)
                 elif (self.mode=="Extended Vigenere"): # Extended
-                    pass
+                    plaintext = ExtendedDecrypt(ciphertext,key)
                 elif (self.mode=="Playfair"): # Playfair
                     plaintext = PlayfairDecrypt(ciphertext,key)
 

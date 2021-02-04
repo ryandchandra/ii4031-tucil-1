@@ -16,7 +16,7 @@ def ExtendedEncrypt(plaintext,key):
         if (i%5==4): # Set ciphertext to blocks of 5 characters
             result += " "
         
-    return result()
+    return result
     
 def ExtendedDecrypt(ciphertext,key):
     # Extended Vigenere Decrypt ciphertext with key
