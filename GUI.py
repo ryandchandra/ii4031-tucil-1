@@ -122,11 +122,11 @@ class GUI:
         
         if (self.mode!="Affine"): # for methods other than Affine
             # Take the plaintext and key from the field
-            plaintext = self.plaintext.entry.get("1.0",tk.END)
+            plaintext = self.plaintext.entry.get("1.0",tk.END)[:-1]
             key = self.keyframe.entry.get()
             
             # Check for validity
-            if (len(plaintext)==1): # Empty plaintext
+            if (len(plaintext)==0): # Empty plaintext
                 self.AlertWindow("Please insert plaintext")
             elif (len(key)==0): # Empty key
                 self.AlertWindow("Please insert key")
@@ -149,12 +149,12 @@ class GUI:
                 
         else: # Affine
             # Take the plaintext and parameters from the field
-            plaintext = self.plaintext.entry.get("1.0",tk.END)
+            plaintext = self.plaintext.entry.get("1.0",tk.END)[:-1]
             multiple = self.affinekeyframe.multiple_entry.get()
             offset = self.affinekeyframe.offset_entry.get()
             
             # Check for validity
-            if (len(plaintext)==1): # Empty plaintext
+            if (len(plaintext)==0): # Empty plaintext
                 self.AlertWindow("Please insert plaintext")
             elif (not multiple.isnumeric() or not offset.isnumeric()): # Non numeric multiple and offset
                 self.AlertWindow("Multiple and offset is a number")
@@ -178,10 +178,10 @@ class GUI:
         if (self.mode!="Affine"): # for methods other than Affine
             # Take the ciphertext and key from the field
             key = self.keyframe.entry.get()
-            ciphertext = self.ciphertext.entry.get("1.0",tk.END)
+            ciphertext = self.ciphertext.entry.get("1.0",tk.END)[:-1]
 
             # Check for validity
-            if (len(ciphertext)==1): # Empty ciphertext
+            if (len(ciphertext)==0): # Empty ciphertext
                 self.AlertWindow("Please insert ciphertext")
             elif (len(key)==0): # Empty key
                 self.AlertWindow("Please insert key")
@@ -204,12 +204,12 @@ class GUI:
                 
         else: # Affine
             # Take the plaintext and parameters from the field
-            ciphertext = self.ciphertext.entry.get("1.0",tk.END)
+            ciphertext = self.ciphertext.entry.get("1.0",tk.END)[:-1]
             multiple = self.affinekeyframe.multiple_entry.get()
             offset = self.affinekeyframe.offset_entry.get()
             
             # Check for validity
-            if (len(ciphertext)==1): # Empty plaintext
+            if (len(ciphertext)==0): # Empty plaintext
                 self.AlertWindow("Please insert plaintext")
             elif (not multiple.isnumeric() or not offset.isnumeric()): # Non numeric multiple and offset
                 self.AlertWindow("Multiple and offset is a number")
@@ -264,10 +264,10 @@ class GUI:
         if (filename!=""): # If file name is chosen
             file = open(filename,"wt")
             if (text=="plaintext"): # For plaintext, insert the plaintext
-                plaintext = self.plaintext.entry.get("1.0",tk.END)
+                plaintext = self.plaintext.entry.get("1.0",tk.END)[:-1]
                 file.write(plaintext)
             elif (text=="ciphertext"): # For ciphertext, insert the ciphertext
-                ciphertext = self.ciphertext.entry.get("1.0",tk.END)
+                ciphertext = self.ciphertext.entry.get("1.0",tk.END)[:-1]
                 file.write(ciphertext)
                 
             file.close()
