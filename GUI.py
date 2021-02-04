@@ -67,16 +67,17 @@ class GUI:
         self.cipher_method_frame.frame.grid(row=0,column=3,rowspan=3,sticky="ns")
         
         #--- file frame ---#
-        file_method_list = ["Open Plaintext File","Open Ciphertext File","Save Plaintext to File","Save Ciphertext to File"]
+        file_method_list = ["Open Plaintext TextFile","Open Ciphertext TextFile","Save Plaintext to TextFile","Save Ciphertext to TextFile","Binary File"]
         self.file_frame = ButtonListFrame(
             title = "File",
             labels = file_method_list,
             width = 25
         )
-        self.file_frame.button_list[0].bind("<Button-1>",lambda event,text="plaintext": self.OpenFile(event,text))
-        self.file_frame.button_list[1].bind("<Button-1>",lambda event,text="ciphertext": self.OpenFile(event,text))
-        self.file_frame.button_list[2].bind("<Button-1>",lambda event,text="plaintext": self.SaveFile(event,text))
-        self.file_frame.button_list[3].bind("<Button-1>",lambda event,text="ciphertext": self.SaveFile(event,text))
+        self.file_frame.button_list[0].bind("<Button-1>",lambda event,text="plaintext": self.OpenFileText(event,text))
+        self.file_frame.button_list[1].bind("<Button-1>",lambda event,text="ciphertext": self.OpenFileText(event,text))
+        self.file_frame.button_list[2].bind("<Button-1>",lambda event,text="plaintext": self.SaveFileText(event,text))
+        self.file_frame.button_list[3].bind("<Button-1>",lambda event,text="ciphertext": self.SaveFileText(event,text))
+        self.file_frame.button_list[4].bind("<Button-1>",self.BinaryFileWindow)
         self.file_frame.frame.grid(row=2,column=3)
         
     def ChangeMode(self,event,mode):
@@ -221,23 +222,19 @@ class GUI:
                     self.plaintext.entry.delete("1.0",tk.END)
                     self.plaintext.entry.insert("1.0",plaintext)
         
-    def OpenFile(self,event,text):
+    def OpenFileText(self,event,text):
         # Open file using open file dialog
         
         # Take filename
         filename = fd.askopenfilename(
             initialdir = "/",
             title = "Select " + text + " file",
-            filetypes = [("Text files (.txt)","*.txt"),("Jpeg files (.jpg)","*.jpg"),("All files","*.*")]
+            filetypes = [("Text files (.txt)","*.txt")]
         )
         
         if (filename!=""): # If filename is chosen
-            if (filename.endswith(".txt")): # Text file
-                file = open(filename,"rt")
-                content = file.read()
-            else: # Binary file
-                file = open(filename,"rb")
-                content = file.read()
+            file = open(filename,"rt")
+            content = file.read()
                 
             file.close()
             
@@ -250,34 +247,25 @@ class GUI:
         
         return "break"
         
-    def SaveFile(self,event,text):
+    def SaveFileText(self,event,text):
         # Save file using save file dialog
         
         # Take filename
         filename = fd.asksaveasfilename(
             initialdir = "/",
             title = "Select " + text + " file",
-            filetypes = [("Text files (.txt)","*.txt"),("Jpeg files (.jpg)","*.jpg"),("All files","*.*")],
-            defaultextension = [("Text files (.txt)","*.txt"),("Jpeg files (.jpg)","*.jpg"),("All files","*.*")]
+            filetypes = [("Text files (.txt)","*.txt")],
+            defaultextension = [("Text files (.txt)","*.txt")]
         )
         
         if (filename!=""): # If file name is chosen
-            if (filename.endswith(".txt")): # Text file
-                file = open(filename,"wt")
-                if (text=="plaintext"): # For plaintext, insert the plaintext
-                    plaintext = self.plaintext.entry.get("1.0",tk.END)
-                    file.write(plaintext)
-                elif (text=="ciphertext"): # For ciphertext, insert the ciphertext
-                    ciphertext = self.ciphertext.entry.get("1.0",tk.END)
-                    file.write(ciphertext)
-            else: # Binary file
-                file = open(filename,"wb")
-                if (text=="plaintext"): # For plaintext, insert the plaintext
-                    plaintext = self.plaintext.entry.get("1.0",tk.END)
-                    file.write(plaintext)
-                elif (text=="ciphertext"): # For ciphertext, insert the ciphertext
-                    ciphertext = self.ciphertext.entry.get("1.0",tk.END)
-                    file.write(ciphertext)
+            file = open(filename,"wt")
+            if (text=="plaintext"): # For plaintext, insert the plaintext
+                plaintext = self.plaintext.entry.get("1.0",tk.END)
+                file.write(plaintext)
+            elif (text=="ciphertext"): # For ciphertext, insert the ciphertext
+                ciphertext = self.ciphertext.entry.get("1.0",tk.END)
+                file.write(ciphertext)
                 
             file.close()
         
@@ -291,3 +279,69 @@ class GUI:
         
         tk.Label(master=alert_window,text=text).pack(padx=120,pady=20)
         tk.Button(master=alert_window,text="OK",width=10,command=lambda:alert_window.destroy()).pack(pady=10)
+        
+        alert_window.grab_set()
+        
+    def BinaryFileWindow(self,event):
+        # Create new window for file encrypt/decrypt
+        # Components : label, key entry, and buttons
+        new_window = tk.Toplevel(self.parent)
+        new_window.title("Binary File")
+        
+        self.binary_file = ""
+
+        self.file_label = tk.Label(master=new_window,text="File : " + self.binary_file)
+        self.file_label.grid(row=0,column=0,columnspan=2,sticky="we",padx=120,pady=2)
+        self.key_label = tk.Label(master=new_window,text="Key :")
+        self.key_label.grid(row=1,column=0,columnspan=2,pady=2)
+        self.key_entry = tk.Entry(master=new_window,width=15)
+        self.key_entry.grid(row=2,column=0,columnspan=2,pady=2)
+        tk.Button(master=new_window,text="Choose File",width=20,command=self.ChooseFileBinary).grid(row=3,column=0,columnspan=2,pady=2)
+        tk.Button(master=new_window,text="Encrypt and Save",width=20,command=self.SaveEncryptedFile).grid(row=4,column=0,columnspan=2,pady=2)
+        tk.Button(master=new_window,text="Decrypt and Save",width=20,command=self.SaveDecryptedFile).grid(row=5,column=0,columnspan=2,pady=2)
+        tk.Button(master=new_window,text="Unselect File",width=20,command=self.UnselectFile).grid(row=6,column=0,columnspan=2,pady=2)
+
+        new_window.grab_set()
+        
+    def ChooseFileBinary(self):
+        # Take filename
+        filename = fd.askopenfilename(
+            initialdir = "/",
+            title = "Select  file",
+            filetypes = [("Jpeg files (.jpg)","*.jpg"),("All files","*.*")],
+        )
+        
+        if (filename!=""):
+            self.file_label["text"] = "File : " + filename
+            self.binary_file = filename
+                
+    def SaveEncryptedFile(self):
+        # buka file di self.binary_file 
+        key = self.key_entry.get()
+        #encrypt
+        
+        # save
+        filename = fd.asksaveasfilename(
+            initialdir = "/",
+            title = "Save file",
+            filetypes = [("Jpeg files (.jpg)","*.jpg"),("All files","*.*")],
+            defaultextension = [("Jpeg files (.jpg)","*.jpg"),("All files","*.*")]
+        )
+        
+        
+    def SaveDecryptedFile(self):
+        # buka file di self.binary_file 
+        key = self.key_entry.get()
+        # decrypt
+        
+        # sama kayak atasnya
+        filename = fd.asksaveasfilename(
+            initialdir = "/",
+            title = "Save file",
+            filetypes = [("Jpeg files (.jpg)","*.jpg"),("All files","*.*")],
+            defaultextension = [("Jpeg files (.jpg)","*.jpg"),("All files","*.*")]
+        )
+    
+    def UnselectFile(self):
+        self.binary_file = ""
+        self.file_label["text"] = "File : " + self.binary_file
