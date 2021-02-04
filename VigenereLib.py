@@ -19,7 +19,7 @@ def VigenereEncrypt(plaintext,key):
     
     # Prepare the plaintext and key
     prepared_plaintext = PrepareText(plaintext)
-    extended_key = GenerateVigenereKey(key,len(prepared_plaintext))
+    extended_key = GenerateVigenereKey(PrepareText(key),len(prepared_plaintext))
 
     # Encrypt
     result = ""
@@ -38,7 +38,7 @@ def VigenereDecrypt(ciphertext,key):
     
     # Prepare the ciphertext and key
     prepared_ciphertext = PrepareText(ciphertext)
-    extended_key = GenerateVigenereKey(key,len(prepared_ciphertext))
+    extended_key = GenerateVigenereKey(PrepareText(key),len(prepared_ciphertext))
     
     # Decrypt
     result = ""
@@ -64,7 +64,7 @@ def AutoKeyVigenereEncrypt(plaintext,key):
     
     # Prepare the plaintext and key
     prepared_plaintext = PrepareText(plaintext)
-    extended_key = GenerateVigenereAutoKey(prepared_plaintext,key)
+    extended_key = GenerateVigenereAutoKey(prepared_plaintext,PrepareText(key))
     
     # Encrypt
     result = ""
@@ -83,6 +83,7 @@ def AutoKeyVigenereDecrypt(ciphertext,key):
     
     # Prepare the ciphertext
     prepared_ciphertext = PrepareText(ciphertext)
+    key = PrepareText(key)
     
     # Decrypt
     result = ""
