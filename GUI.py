@@ -3,6 +3,7 @@ import tkinter.scrolledtext as st
 import tkinter.filedialog as fd
 import random
 import math
+import pickle
 
 from Components import *
 
