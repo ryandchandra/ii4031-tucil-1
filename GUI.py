@@ -311,7 +311,7 @@ class GUI:
         filename = fd.askopenfilename(
             initialdir = "/",
             title = "Select  file",
-            filetypes = [("Jpeg files (.jpg)","*.jpg"),("All files","*.*")],
+            filetypes = [("Text files (.txt)","*.txt"),("Jpeg files (.jpg)","*.jpg"),("Binary files (.bin)","*.bin"),("All files","*.*")],
         )
         
         if (filename!=""):
@@ -322,28 +322,41 @@ class GUI:
         # buka file di self.binary_file 
         key = self.key_entry.get()
         #encrypt
-        
+        file = open(self.binary_file,"r")
+        readPlaintext = file.read()
+        encripChipertext = ExtendedEncrypt(readPlaintext, key)
+        file.close()
         # save
         filename = fd.asksaveasfilename(
             initialdir = "/",
             title = "Save file",
-            filetypes = [("Jpeg files (.jpg)","*.jpg"),("All files","*.*")],
-            defaultextension = [("Jpeg files (.jpg)","*.jpg"),("All files","*.*")]
+            filetypes = [("Text files (.txt)","*.txt"),("Jpeg files (.jpg)","*.jpg"),("Binary files (.bin)","*.bin"),("All files","*.*")],
+            defaultextension = [("Binary files (.bin)","*.bin"),("All files","*.*")]
         )
+        output_file = open(filename, "wb")
+        pickle.dump(encripChipertext, output_file)
+        output_file.close()
         
         
     def SaveDecryptedFile(self):
         # buka file di self.binary_file 
         key = self.key_entry.get()
         # decrypt
-        
-        # sama kayak atasnya
-        filename = fd.asksaveasfilename(
-            initialdir = "/",
-            title = "Save file",
-            filetypes = [("Jpeg files (.jpg)","*.jpg"),("All files","*.*")],
-            defaultextension = [("Jpeg files (.jpg)","*.jpg"),("All files","*.*")]
-        )
+        if (self.binary_file[-4:]==".bin"):
+            file = open(self.binary_file,"rb")
+            readChipertext = pickle.load(file)
+            decripPlaintext = ExtendedDecrypt(readChipertext, key)
+            file.close()
+            # sama kayak atasnya
+            filename = fd.asksaveasfilename(
+                initialdir = "/",
+                title = "Save file",
+                filetypes = [("Text files (.txt)","*.txt"),("Jpeg files (.jpg)","*.jpg"),("Binary files (.bin)","*.bin"),("All files","*.*")],
+                defaultextension = [("Text files (.txt)","*.txt"),("All files","*.*")]
+            )
+            output_file = open(filename, "wt")
+            output_file.write(decripPlaintext)
+            output_file.close()
     
     def UnselectFile(self):
         self.binary_file = ""

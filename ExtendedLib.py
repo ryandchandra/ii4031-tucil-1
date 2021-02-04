@@ -12,10 +12,7 @@ def ExtendedEncrypt(plaintext,key):
     result = ""
     for i in range(len(plaintext)):
         encrypted_char_num = (ord(plaintext[i]) + ord(extended_key[i]))%256
-        result += chr(encrypted_char_num)
-        if (i%5==4): # Set ciphertext to blocks of 5 characters
-            result += " "
-        
+        result += chr(encrypted_char_num)        
     return result
     
 def ExtendedDecrypt(ciphertext,key):
