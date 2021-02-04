@@ -320,43 +320,59 @@ class GUI:
                 
     def SaveEncryptedFile(self):
         # buka file di self.binary_file 
-        key = self.key_entry.get()
-        #encrypt
-        file = open(self.binary_file,"r")
-        readPlaintext = file.read()
-        encripChipertext = ExtendedEncrypt(readPlaintext, key)
-        file.close()
-        # save
-        filename = fd.asksaveasfilename(
-            initialdir = "/",
-            title = "Save file",
-            filetypes = [("Text files (.txt)","*.txt"),("Binary files (.bin)","*.bin"),("All files","*.*")],
-            defaultextension = [("Binary files (.bin)","*.bin"),("All files","*.*")]
-        )
-        output_file = open(filename, "wb")
-        pickle.dump(encripChipertext, output_file)
-        output_file.close()
+        if (self.binary_file==""):
+            self.AlertWindow("Please choose a file")
+        else:
+            #encrypt
+            key = self.key_entry.get()
+            if (len(key)==0):
+                self.AlertWindow("Please insert key")
+            else:
+                file = open(self.binary_file,"r")
+                readPlaintext = file.read()
+                encripChipertext = ExtendedEncrypt(readPlaintext, key)
+                file.close()
+                # save
+                filename = fd.asksaveasfilename(
+                    initialdir = "/",
+                    title = "Save file",
+                    filetypes = [("Binary files (.bin)","*.bin"),("All files","*.*")],
+                    defaultextension = [("Binary files (.bin)","*.bin"),("All files","*.*")]
+                )
+                if (filename!=""):
+                    output_file = open(filename, "wb")
+                    pickle.dump(encripChipertext, output_file)
+                    output_file.close()
         
         
     def SaveDecryptedFile(self):
         # buka file di self.binary_file 
-        key = self.key_entry.get()
-        # decrypt
-        if (self.binary_file[-4:]==".bin"):
-            file = open(self.binary_file,"rb")
-            readChipertext = pickle.load(file)
-            decripPlaintext = ExtendedDecrypt(readChipertext, key)
-            file.close()
-            # sama kayak atasnya
-            filename = fd.asksaveasfilename(
-                initialdir = "/",
-                title = "Save file",
-                filetypes = [("Text files (.txt)","*.txt"),("Binary files (.bin)","*.bin"),("All files","*.*")],
-                defaultextension = [("Text files (.txt)","*.txt"),("All files","*.*")]
-            )
-            output_file = open(filename, "w")
-            output_file.write(decripPlaintext)
-            output_file.close()
+        if (self.binary_file==""):
+            self.AlertWindow("Please choose a file")
+        else:
+            # decrypt
+            key = self.key_entry.get()
+            if (len(key)==0):
+                self.AlertWindow("Please insert key")
+            else:
+                if (self.binary_file[-4:]==".bin"):
+                    file = open(self.binary_file,"rb")
+                    readChipertext = pickle.load(file)
+                    decripPlaintext = ExtendedDecrypt(readChipertext, key)
+                    file.close()
+                    # sama kayak atasnya
+                    filename = fd.asksaveasfilename(
+                        initialdir = "/",
+                        title = "Save file",
+                        filetypes = [("Text files (.txt)","*.txt"),("All files","*.*")],
+                        defaultextension = [("Text files (.txt)","*.txt"),("All files","*.*")]
+                    )
+                    if (filename!=""):
+                        output_file = open(filename, "w")
+                        output_file.write(decripPlaintext)
+                        output_file.close()
+                else:
+                    self.AlertWindow("Ekstensi file yang mau didekripsi harus .bin")
     
     def UnselectFile(self):
         self.binary_file = ""
