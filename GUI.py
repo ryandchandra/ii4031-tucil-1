@@ -311,7 +311,7 @@ class GUI:
         filename = fd.askopenfilename(
             initialdir = "/",
             title = "Select  file",
-            filetypes = [("Text files (.txt)","*.txt"),("Jpeg files (.jpg)","*.jpg"),("Binary files (.bin)","*.bin"),("All files","*.*")],
+            filetypes = [("Text files (.txt)","*.txt"),("Binary files (.bin)","*.bin"),("All files","*.*")],
         )
         
         if (filename!=""):
@@ -330,7 +330,7 @@ class GUI:
         filename = fd.asksaveasfilename(
             initialdir = "/",
             title = "Save file",
-            filetypes = [("Text files (.txt)","*.txt"),("Jpeg files (.jpg)","*.jpg"),("Binary files (.bin)","*.bin"),("All files","*.*")],
+            filetypes = [("Text files (.txt)","*.txt"),("Binary files (.bin)","*.bin"),("All files","*.*")],
             defaultextension = [("Binary files (.bin)","*.bin"),("All files","*.*")]
         )
         output_file = open(filename, "wb")
@@ -351,10 +351,10 @@ class GUI:
             filename = fd.asksaveasfilename(
                 initialdir = "/",
                 title = "Save file",
-                filetypes = [("Text files (.txt)","*.txt"),("Jpeg files (.jpg)","*.jpg"),("Binary files (.bin)","*.bin"),("All files","*.*")],
+                filetypes = [("Text files (.txt)","*.txt"),("Binary files (.bin)","*.bin"),("All files","*.*")],
                 defaultextension = [("Text files (.txt)","*.txt"),("All files","*.*")]
             )
-            output_file = open(filename, "wt")
+            output_file = open(filename, "w")
             output_file.write(decripPlaintext)
             output_file.close()
     
